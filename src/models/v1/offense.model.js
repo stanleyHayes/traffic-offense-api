@@ -1,5 +1,4 @@
-import {Schema, model} from "mongoose";
-import validator from "validator";
+import {model, Schema} from "mongoose";
 
 const offenseSchema = new Schema({
     fine: {
@@ -36,6 +35,11 @@ const offenseSchema = new Schema({
         type: String,
         enum: ['DRAFT', 'PENDING', 'PAID'],
         default: 'DRAFT'
+    },
+    offense_name: {
+        type: String,
+        enum: ['RED_LIGHT', 'OVER_SPEEDING'],
+        required: true
     }
 }, {timestamps: {createdAt: "created_at", updatedAt: "updated_at"}});
 
