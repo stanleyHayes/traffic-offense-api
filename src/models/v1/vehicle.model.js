@@ -6,7 +6,11 @@ const vehicleSchema = new Schema({
         required: [true, 'Number plate'],
         trim: true
     },
-    driver: {},
+    driver: {
+        type: Schema.Types.ObjectId,
+        ref: "Driver",
+        required: [true, "Driver required"]
+    },
     color: {
         type: String,
         required: [true, 'Color required'],
