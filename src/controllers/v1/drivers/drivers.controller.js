@@ -3,8 +3,8 @@ import {DRIVER_DAO} from "../../../dao/v1/drivers/drivers.dao.js";
 
 const registerDriver = async (req, res) => {
     try {
-        const {first_name, last_name, email, license_id, address} = req.body;
-        if (!first_name || !last_name || !email || !license_id || !address) {
+        const {first_name, last_name, email, license_id, address, phone} = req.body;
+        if (!first_name || !last_name || !email || !license_id || !address || !phone) {
             return res.status(httpStatus.BAD_REQUEST).json({message: "Missing required fields"});
         }
         const {code, data, message, success} = await DRIVER_DAO.createDriver({
@@ -12,7 +12,8 @@ const registerDriver = async (req, res) => {
             last_name,
             email,
             license_id,
-            address
+            address,
+            phone
         });
         if (!success) {return res.status(code).json({message});}
         res.status(code).json({data, message});

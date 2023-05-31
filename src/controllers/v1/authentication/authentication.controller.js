@@ -7,7 +7,7 @@ import {JWT_SECRET} from "./../../../config/config.js";
 
 const register = async (req, res) => {
     try {
-        const {first_name, last_name, email, username, password} = req.body;
+        const {first_name, last_name, email, username, password, permissions} = req.body;
         if (!first_name || !last_name || !email || !username || !password) {
             return res.status(httpStatus.BAD_REQUEST).json({message: "Missing required fields"});
         }
@@ -21,7 +21,8 @@ const register = async (req, res) => {
             last_name,
             email,
             username,
-            password: await bcrypt.hash(password, 10)
+            password: await bcrypt.hash(password, 10),
+            permissions
         });
         if (!success) {
             return res.status(code).json({message});
@@ -35,15 +36,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const {username_or_email, password} = req.body;
-        const {success, code, data, message} = await ADMIN_DAO.getAdmin({
+        const {success, code, data} = await ADMIN_DAO.getAdmin({
             $or: [{email: username_or_email}, {username: username_or_email}]
         });
-        if (!success) return res.status(code).json({data, message: "Auth Failed"});
-        if (!await bcrypt.compare(password, data.password)) return res.status(code).json({
-            data, message: "Auth Failed"
-        });
+        if (!success) return res.status(code).json({data: null, message: "Auth Failed"});
+        if (!await bcrypt.compare(password, data.password)) return res.status(code).json({data: null, message: "Auth Failed"});
         const token = jwt.sign({_id: data._id}, JWT_SECRET, {expiresIn: '30d'}, null);
-        res.status(code).json({data, token, message});
+        res.status(code).json({data, token, message: "Logged in successfully"});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }

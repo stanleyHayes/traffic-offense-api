@@ -17,6 +17,7 @@ const driverSchema = new Schema({
         lowercase: true,
         unique: true,
         index: true,
+        required: true,
         validate(value) {
             if (!validator.isEmail(value)) {
                 throw new Error(`Invalid email ${value}`);
@@ -27,6 +28,7 @@ const driverSchema = new Schema({
         type: String,
         unique: true,
         index: true,
+        required: true,
         validate(value) {
             if (!validator.isMobilePhone(value)) {
                 throw new Error(`Invalid email ${value}`);
