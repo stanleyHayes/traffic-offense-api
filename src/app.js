@@ -7,7 +7,11 @@ import morgan from "morgan";
 import {MONGODB_URI} from "./config/config.js";
 
 import driverV1Router from "./routes/v1/driver.routes.js";
+import vehicleV1Router from "./routes/v1/vehicle.routes.js";
+import offenseV1Router from "./routes/v1/offense.routes.js";
+import adminsV1Router from "./routes/v1/admin.routes.js";
 import authV1Router from "./routes/v1/authentication.routes.js";
+import dashboardV1Router from "./routes/v1/dashboard.routes.js";
 
 const app = express();
 mongoose.connect(MONGODB_URI).then(value => {
@@ -22,5 +26,9 @@ app.use(morgan("dev"));
 app.use(express.json({limit: "10mb"}));
 app.use("/api/v1/drivers", driverV1Router);
 app.use("/api/v1/auth", authV1Router);
+app.use("/api/v1/vehicles", vehicleV1Router);
+app.use("/api/v1/offenses", offenseV1Router);
+app.use("/api/v1/admins", adminsV1Router);
+app.use("/api/v1/dashboard", dashboardV1Router);
 
 export default app;

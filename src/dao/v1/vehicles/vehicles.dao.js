@@ -134,8 +134,8 @@ const deleteVehicle = async (params) => {
 
 const getVehicles = async (match, options) => {
     try {
-        const vehicles = await Vehicle.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const vehiclesCount = await Vehicle.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
+        const vehiclesCount = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,
             data: vehicles,

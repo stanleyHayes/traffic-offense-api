@@ -134,8 +134,8 @@ const deleteAdmin = async (params) => {
 
 const getAdmins = async (match, options) => {
     try {
-        const admins = await Admin.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const adminsCount = await Admin.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const admins = await Admin.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
+        const adminsCount = await Admin.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,
             data: admins,

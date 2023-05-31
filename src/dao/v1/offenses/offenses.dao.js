@@ -1,21 +1,9 @@
 import Offense from "../../../models/v1/offense.model.js";
 import httpStatus from "http-status";
 
-const createOffense = async (driver) => {
+const createOffense = async (offense) => {
     try {
-        const existingOffense = await Offense.findOne({
-            email: driver.email
-        });
-        // if driver already exists, return with error
-        if (existingOffense) {
-            return {
-                success: false,
-                message: 'Offense with email already exist',
-                code: httpStatus.CONFLICT,
-                data: null
-            }
-        }
-        const createdOffense = await Offense.create({...driver});
+        const createdOffense = await Offense.create({...offense});
         return {
             success: true,
             message: 'Offense registered successfully',
@@ -34,8 +22,8 @@ const createOffense = async (driver) => {
 
 const getOffense = async (params) => {
     try {
-        const driver = await Offense.findOne(params);
-        if (!driver) {
+        const offense = await Offense.findOne(params);
+        if (!offense) {
             return {
                 success: false,
                 message: 'Offense not found',
@@ -47,7 +35,7 @@ const getOffense = async (params) => {
             success: true,
             message: 'Offense retrieved successfully',
             code: httpStatus.OK,
-            data: driver
+            data: offense
         }
     } catch (e) {
         return {
@@ -62,8 +50,8 @@ const getOffense = async (params) => {
 
 const updateOffense = async (params, data) => {
     try {
-        const driver = await getOffense(params);
-        if (!driver.success) {
+        const offense = await getOffense(params);
+        if (!offense.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
@@ -83,14 +71,14 @@ const updateOffense = async (params, data) => {
             }
         }
         for (let key of data) {
-            driver[key] = data[key];
+            offense[key] = data[key];
         }
-        await driver.save();
+        await offense.save();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Offense updated successfully',
-            data: driver
+            data: offense
         }
     } catch (e) {
         return {
@@ -105,8 +93,8 @@ const updateOffense = async (params, data) => {
 
 const deleteOffense = async (params) => {
     try {
-        const driver = await getOffense(params);
-        if (!driver.success) {
+        const offense = await getOffense(params);
+        if (!offense.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
@@ -114,12 +102,12 @@ const deleteOffense = async (params) => {
                 data: null
             }
         }
-        await driver.remove();
+        await offense.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Offense removed successfully',
-            data: driver
+            data: offense
         }
     } catch (e) {
         return {
@@ -133,14 +121,14 @@ const deleteOffense = async (params) => {
 
 const getOffenses = async (match, options) => {
     try {
-        const drivers = await Offense.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const driversCount = await Offense.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const offenses = await Offense.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
+        const offensesCount = await Offense.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,
-            data: drivers,
+            data: offenses,
             code: httpStatus.OK,
-            message: `${driversCount} drivers retrieved`,
-            count: driversCount
+            message: `${offensesCount} offenses retrieved`,
+            count: offensesCount
 
         }
     } catch (e) {
