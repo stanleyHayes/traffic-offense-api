@@ -1,26 +1,26 @@
-import Driver from "../../../models/v1/driver.model.js";
+import Offense from "../../../models/v1/offense.model.js";
 import httpStatus from "http-status";
 
-const createDriver = async (driver) => {
+const createOffense = async (driver) => {
     try {
-        const existingDriver = await Driver.findOne({
+        const existingOffense = await Offense.findOne({
             email: driver.email
         });
         // if driver already exists, return with error
-        if (existingDriver) {
+        if (existingOffense) {
             return {
                 success: false,
-                message: 'Driver with email already exist',
+                message: 'Offense with email already exist',
                 code: httpStatus.CONFLICT,
                 data: null
             }
         }
-        const createdDriver = await Driver.create({...driver});
+        const createdOffense = await Offense.create({...driver});
         return {
             success: true,
-            message: 'Driver registered successfully',
+            message: 'Offense registered successfully',
             code: httpStatus.CREATED,
-            data: createdDriver
+            data: createdOffense
         }
     } catch (e) {
         return {
@@ -32,20 +32,20 @@ const createDriver = async (driver) => {
     }
 }
 
-const getDriver = async (params) => {
+const getOffense = async (params) => {
     try {
-        const driver = await Driver.findOne(params);
+        const driver = await Offense.findOne(params);
         if (!driver) {
             return {
                 success: false,
-                message: 'Driver not found',
+                message: 'Offense not found',
                 code: httpStatus.NOT_FOUND,
                 data: null
             }
         }
         return {
             success: true,
-            message: 'Driver retrieved successfully',
+            message: 'Offense retrieved successfully',
             code: httpStatus.OK,
             data: driver
         }
@@ -60,20 +60,19 @@ const getDriver = async (params) => {
 }
 
 
-const updateDriver = async (params, data) => {
+const updateOffense = async (params, data) => {
     try {
-        const driver = await getDriver(params);
+        const driver = await getOffense(params);
         if (!driver.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Offense not found',
                 data: null
             }
         }
-
         const updates = Object.keys(data);
-        const allowedUpdates = ['first_name', 'last_name', 'address', 'email'];
+        const allowedUpdates = ['fine', 'offense_name'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -90,7 +89,7 @@ const updateDriver = async (params, data) => {
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver updated successfully',
+            message: 'Offense updated successfully',
             data: driver
         }
     } catch (e) {
@@ -104,14 +103,14 @@ const updateDriver = async (params, data) => {
 }
 
 
-const deleteDriver = async (params) => {
+const deleteOffense = async (params) => {
     try {
-        const driver = await getDriver(params);
+        const driver = await getOffense(params);
         if (!driver.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Offense not found',
                 data: null
             }
         }
@@ -119,7 +118,7 @@ const deleteDriver = async (params) => {
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver removed successfully',
+            message: 'Offense removed successfully',
             data: driver
         }
     } catch (e) {
@@ -132,10 +131,10 @@ const deleteDriver = async (params) => {
     }
 }
 
-const getDrivers = async (match, options) => {
+const getOffenses = async (match, options) => {
     try {
-        const drivers = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const driversCount = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const drivers = await Offense.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
+        const driversCount = await Offense.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
         return {
             success: true,
             data: drivers,
@@ -154,4 +153,4 @@ const getDrivers = async (match, options) => {
     }
 }
 
-export const DRIVER_DAO = {createDriver, getDriver, updateDriver, deleteDriver, getDrivers};
+export const OFFENSE_DAO = {createOffense, getOffense, updateOffense, deleteOffense, getOffenses};

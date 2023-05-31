@@ -2,34 +2,19 @@ import {model, Schema} from "mongoose";
 
 const offenseSchema = new Schema({
     fine: {
-        currency: {
-            type: String,
-            required: [true, 'Currency required']
-        },
-        amount: {
-            type: Number,
-            required: [true, 'Fine amount required']
-        }
+        currency: {type: String, required: [true, 'Currency required']},
+        amount: {type: Number, required: [true, 'Fine amount required']}
     },
-    driver: {
-        type: Schema.Types.ObjectId,
-        ref: "Driver",
-        required: [true, "Driver required"]
-    },
-    vehicle: {
-        type: Schema.Types.ObjectId,
-        ref: "Vehicle",
-        required: [true, "Vehicle required"]
-    },
+    driver: {type: Schema.Types.ObjectId, ref: "Driver", required: [true, "Driver required"]},
+    vehicle: {type: Schema.Types.ObjectId, ref: "Vehicle", required: [true, "Vehicle required"]},
     image: {
-        secure_url: {
-            type: String,
-            required: true
-        },
-        public_id: {
-            type: String,
-            required: true
-        }
+        secure_url: {type: String, required: true},
+        public_id: {type: String, required: true},
+        resource_type: {type: String, required: true},
+        bytes: {type: Number, required: true},
+        format: {type: String, required: true},
+        width: {type: Number, required: true},
+        height: {type: Number, required: true}
     },
     status: {
         type: String,

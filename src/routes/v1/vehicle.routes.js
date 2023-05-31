@@ -1,16 +1,16 @@
 import {Router} from "express";
 
 import {
-    registerDriver,
-    getDrivers,
-    updateDriver,
-    deleteDriver,
-    getDriver
-} from "./../../controllers/v1/drivers/drivers.controller.js";
+    registerVehicle,
+    getVehicles,
+    updateVehicle,
+    deleteVehicle,
+    getVehicle
+} from "./../../controllers/v1/vehicles/vehicles.controller.js";
 
 const router = Router({mergeParams: true});
 
-router.route("/").post(registerDriver).get(getDrivers);
-router.route("/:id").get(getDriver).put(updateDriver).delete(deleteDriver);
+router.route("/").post(registerVehicle).get(getVehicles);
+router.route("/:id").get(getVehicle).put(updateVehicle).delete(deleteVehicle);
 
 export default router;

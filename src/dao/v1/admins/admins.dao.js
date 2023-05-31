@@ -1,26 +1,26 @@
-import Driver from "../../../models/v1/driver.model.js";
+import Admin from "../../../models/v1/admin.model.js";
 import httpStatus from "http-status";
 
-const createDriver = async (driver) => {
+const createAdmin = async (admin) => {
     try {
-        const existingDriver = await Driver.findOne({
-            email: driver.email
+        const existingAdmin = await Admin.findOne({
+            email: admin.email
         });
-        // if driver already exists, return with error
-        if (existingDriver) {
+        // if admin already exists, return with error
+        if (existingAdmin) {
             return {
                 success: false,
-                message: 'Driver with email already exist',
+                message: 'Admin with email already exist',
                 code: httpStatus.CONFLICT,
                 data: null
             }
         }
-        const createdDriver = await Driver.create({...driver});
+        const createdAdmin = await Admin.create({...admin});
         return {
             success: true,
-            message: 'Driver registered successfully',
+            message: 'Admin registered successfully',
             code: httpStatus.CREATED,
-            data: createdDriver
+            data: createdAdmin
         }
     } catch (e) {
         return {
@@ -32,22 +32,22 @@ const createDriver = async (driver) => {
     }
 }
 
-const getDriver = async (params) => {
+const getAdmin = async (params) => {
     try {
-        const driver = await Driver.findOne(params);
-        if (!driver) {
+        const admin = await Admin.findOne(params);
+        if (!admin) {
             return {
                 success: false,
-                message: 'Driver not found',
+                message: 'Admin not found',
                 code: httpStatus.NOT_FOUND,
                 data: null
             }
         }
         return {
             success: true,
-            message: 'Driver retrieved successfully',
+            message: 'Admin retrieved successfully',
             code: httpStatus.OK,
-            data: driver
+            data: admin
         }
     } catch (e) {
         return {
@@ -60,14 +60,14 @@ const getDriver = async (params) => {
 }
 
 
-const updateDriver = async (params, data) => {
+const updateAdmin = async (params, data) => {
     try {
-        const driver = await getDriver(params);
-        if (!driver.success) {
+        const admin = await getAdmin(params);
+        if (!admin.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Admin not found',
                 data: null
             }
         }
@@ -84,14 +84,14 @@ const updateDriver = async (params, data) => {
             }
         }
         for (let key of data) {
-            driver[key] = data[key];
+            admin[key] = data[key];
         }
-        await driver.save();
+        await admin.save();
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver updated successfully',
-            data: driver
+            message: 'Admin updated successfully',
+            data: admin
         }
     } catch (e) {
         return {
@@ -104,23 +104,23 @@ const updateDriver = async (params, data) => {
 }
 
 
-const deleteDriver = async (params) => {
+const deleteAdmin = async (params) => {
     try {
-        const driver = await getDriver(params);
-        if (!driver.success) {
+        const admin = await getAdmin(params);
+        if (!admin.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Admin not found',
                 data: null
             }
         }
-        await driver.remove();
+        await admin.remove();
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver removed successfully',
-            data: driver
+            message: 'Admin removed successfully',
+            data: admin
         }
     } catch (e) {
         return {
@@ -132,16 +132,16 @@ const deleteDriver = async (params) => {
     }
 }
 
-const getDrivers = async (match, options) => {
+const getAdmins = async (match, options) => {
     try {
-        const drivers = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const driversCount = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const admins = await Admin.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
+        const adminsCount = await Admin.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
         return {
             success: true,
-            data: drivers,
+            data: admins,
             code: httpStatus.OK,
-            message: `${driversCount} drivers retrieved`,
-            count: driversCount
+            message: `${adminsCount} admins retrieved`,
+            count: adminsCount
 
         }
     } catch (e) {
@@ -154,4 +154,4 @@ const getDrivers = async (match, options) => {
     }
 }
 
-export const DRIVER_DAO = {createDriver, getDriver, updateDriver, deleteDriver, getDrivers};
+export const ADMIN_DAO = {createAdmin, getAdmin, updateAdmin, deleteAdmin, getAdmins};

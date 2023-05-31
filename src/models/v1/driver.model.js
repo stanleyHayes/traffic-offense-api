@@ -23,6 +23,16 @@ const driverSchema = new Schema({
             }
         }
     },
+    phone: {
+        type: String,
+        unique: true,
+        index: true,
+        validate(value) {
+            if (!validator.isMobilePhone(value)) {
+                throw new Error(`Invalid email ${value}`);
+            }
+        }
+    },
     license_id: {
         type: String,
         required: [true, 'License required'],
@@ -40,12 +50,12 @@ const driverSchema = new Schema({
             required: [true, 'City required'],
             trim: true
         },
-        addressLine1: {
+        address_line_1: {
             type: String,
             required: [true, 'Address line 1 required'],
             trim: true
         },
-        addressLine2: {
+        address_line_2: {
             type: String,
             trim: true
         },

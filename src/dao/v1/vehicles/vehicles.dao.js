@@ -1,26 +1,26 @@
-import Driver from "../../../models/v1/driver.model.js";
+import Vehicle from "../../../models/v1/vehicle.model.js";
 import httpStatus from "http-status";
 
-const createDriver = async (driver) => {
+const createVehicle = async (vehicle) => {
     try {
-        const existingDriver = await Driver.findOne({
-            email: driver.email
+        const existingVehicle = await Vehicle.findOne({
+            number_plate: vehicle.number_plate
         });
-        // if driver already exists, return with error
-        if (existingDriver) {
+        // if vehicle already exists, return with error
+        if (existingVehicle) {
             return {
                 success: false,
-                message: 'Driver with email already exist',
+                message: 'Vehicle with number plate already exist',
                 code: httpStatus.CONFLICT,
                 data: null
             }
         }
-        const createdDriver = await Driver.create({...driver});
+        const createdVehicle = await Vehicle.create({...vehicle});
         return {
             success: true,
-            message: 'Driver registered successfully',
+            message: 'Vehicle registered successfully',
             code: httpStatus.CREATED,
-            data: createdDriver
+            data: createdVehicle
         }
     } catch (e) {
         return {
@@ -32,22 +32,22 @@ const createDriver = async (driver) => {
     }
 }
 
-const getDriver = async (params) => {
+const getVehicle = async (params) => {
     try {
-        const driver = await Driver.findOne(params);
-        if (!driver) {
+        const vehicle = await Vehicle.findOne(params);
+        if (!vehicle) {
             return {
                 success: false,
-                message: 'Driver not found',
+                message: 'Vehicle not found',
                 code: httpStatus.NOT_FOUND,
                 data: null
             }
         }
         return {
             success: true,
-            message: 'Driver retrieved successfully',
+            message: 'Vehicle retrieved successfully',
             code: httpStatus.OK,
-            data: driver
+            data: vehicle
         }
     } catch (e) {
         return {
@@ -60,20 +60,20 @@ const getDriver = async (params) => {
 }
 
 
-const updateDriver = async (params, data) => {
+const updateVehicle = async (params, data) => {
     try {
-        const driver = await getDriver(params);
-        if (!driver.success) {
+        const vehicle = await getVehicle(params);
+        if (!vehicle.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Vehicle not found',
                 data: null
             }
         }
 
         const updates = Object.keys(data);
-        const allowedUpdates = ['first_name', 'last_name', 'address', 'email'];
+        const allowedUpdates = ['color', 'year', 'make', 'model'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -84,14 +84,14 @@ const updateDriver = async (params, data) => {
             }
         }
         for (let key of data) {
-            driver[key] = data[key];
+            vehicle[key] = data[key];
         }
-        await driver.save();
+        await vehicle.save();
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver updated successfully',
-            data: driver
+            message: 'Vehicle updated successfully',
+            data: vehicle
         }
     } catch (e) {
         return {
@@ -104,23 +104,23 @@ const updateDriver = async (params, data) => {
 }
 
 
-const deleteDriver = async (params) => {
+const deleteVehicle = async (params) => {
     try {
-        const driver = await getDriver(params);
-        if (!driver.success) {
+        const vehicle = await getVehicle(params);
+        if (!vehicle.success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
-                message: 'Driver not found',
+                message: 'Vehicle not found',
                 data: null
             }
         }
-        await driver.remove();
+        await vehicle.remove();
         return {
             success: true,
             code: httpStatus.OK,
-            message: 'Driver removed successfully',
-            data: driver
+            message: 'Vehicle removed successfully',
+            data: vehicle
         }
     } catch (e) {
         return {
@@ -132,16 +132,16 @@ const deleteDriver = async (params) => {
     }
 }
 
-const getDrivers = async (match, options) => {
+const getVehicles = async (match, options) => {
     try {
-        const drivers = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
-        const driversCount = await Driver.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
+        const vehicles = await Vehicle.find(match).sort(options.sort).limit(options.limit).skip(options.skip);
+        const vehiclesCount = await Vehicle.find(match).sort(options.sort).limit(options.limit).skip(options.skip).countDocuments();
         return {
             success: true,
-            data: drivers,
+            data: vehicles,
             code: httpStatus.OK,
-            message: `${driversCount} drivers retrieved`,
-            count: driversCount
+            message: `${vehiclesCount} vehicles retrieved`,
+            count: vehiclesCount
 
         }
     } catch (e) {
@@ -154,4 +154,4 @@ const getDrivers = async (match, options) => {
     }
 }
 
-export const DRIVER_DAO = {createDriver, getDriver, updateDriver, deleteDriver, getDrivers};
+export const VEHICLE_DAO = {createVehicle, getVehicle, updateVehicle, deleteVehicle, getVehicles};

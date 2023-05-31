@@ -9,10 +9,12 @@
     "dev": "nodemon src/index.js"
   },
   "keywords": [],
-  "author": "Count Vladislaus Draguila",
+  "author": "Florence Yeedoun",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.37.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "helmet": "^6.1.5",
