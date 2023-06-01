@@ -7,8 +7,8 @@ import {JWT_SECRET} from "./../../../config/config.js";
 
 const register = async (req, res) => {
     try {
-        const {first_name, last_name, email, username, password, permissions} = req.body;
-        if (!first_name || !last_name || !email || !username || !password) {
+        const {first_name, last_name, email, username, password, permissions, phone} = req.body;
+        if (!first_name || !last_name || !email || !username || !password || !phone) {
             return res.status(httpStatus.BAD_REQUEST).json({message: "Missing required fields"});
         }
         const {
@@ -22,7 +22,8 @@ const register = async (req, res) => {
             email,
             username,
             password: await bcrypt.hash(password, 10),
-            permissions
+            permissions,
+            phone
         });
         if (!success) {
             return res.status(code).json({message});

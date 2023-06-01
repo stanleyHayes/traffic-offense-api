@@ -8,12 +8,10 @@ const registerOffense = async (req, res) => {
         if (!fine || !vehicle || !offense_name || !driver || !image) {
             return res.status(httpStatus.BAD_REQUEST).json({message: "Missing required fields"});
         }
-
-        const {data: d ,  success: s, message: m} = await uploadImage(image, {resource_type: "image"});
-        if(!s){
+        const {data: d, success: s, message: m} = await uploadImage(image, {resource_type: "image"});
+        if (!s) {
             return res.status(httpStatus.BAD_REQUEST).json({message: m});
         }
-
         const {code, data, message, success} = await OFFENSE_DAO.createOffense({
             fine,
             vehicle,
@@ -21,7 +19,10 @@ const registerOffense = async (req, res) => {
             driver,
             image: {...d}
         });
-        if (!success) {return res.status(code).json({message});}
+        if (!success) {
+            return res.status(code).json({message});
+        }
+        await data.populate({path: 'driver', select: 'first_name last_name'}).populate({path: 'vehicle'});
         res.status(code).json({data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
@@ -32,7 +33,9 @@ const getOffense = async (req, res) => {
     try {
         const {id} = req.params;
         const {success, code, data, message} = await OFFENSE_DAO.getOffense({_id: id});
-        if (!success) {return res.status(code).json({data, message});}
+        if (!success) {
+            return res.status(code).json({data, message});
+        }
         res.status(code).json({data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
@@ -59,7 +62,9 @@ const updateOffense = async (req, res) => {
     try {
         const {id} = req.params;
         const {success, code, data, message} = await OFFENSE_DAO.updateOffense({_id: id}, req.body);
-        if (!success) {return res.status(code).json({data, message});}
+        if (!success) {
+            return res.status(code).json({data, message});
+        }
         res.status(code).json({data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
@@ -70,7 +75,9 @@ const deleteOffense = async (req, res) => {
     try {
         const {id} = req.params;
         const {success, code, data, message} = await OFFENSE_DAO.deleteOffense({_id: id});
-        if (!success) {return res.status(code).json({data, message});}
+        if (!success) {
+            return res.status(code).json({data, message});
+        }
         res.status(code).json({data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});

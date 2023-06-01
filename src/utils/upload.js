@@ -20,6 +20,10 @@ const uploadImage = async (path, options) => {
             data: {public_id, secure_url, resource_type, bytes, format, width, height}
         }
     }catch (e) {
+
+        console.log(
+            e.message
+        )
         return {
             success: false,
             data: null,

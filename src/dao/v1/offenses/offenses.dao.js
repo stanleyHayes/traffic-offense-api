@@ -22,7 +22,7 @@ const createOffense = async (offense) => {
 
 const getOffense = async (params) => {
     try {
-        const offense = await Offense.findOne(params);
+        const offense = await Offense.findOne(params).populate({path: 'driver'}).populate({path: 'vehicle'});
         if (!offense) {
             return {
                 success: false,
@@ -121,7 +121,7 @@ const deleteOffense = async (params) => {
 
 const getOffenses = async (match, options) => {
     try {
-        const offenses = await Offense.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
+        const offenses = await Offense.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).populate({path: 'driver'}).populate({path: 'vehicle'});
         const offensesCount = await Offense.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,

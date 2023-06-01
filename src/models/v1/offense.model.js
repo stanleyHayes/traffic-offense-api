@@ -2,8 +2,8 @@ import {model, Schema} from "mongoose";
 
 const offenseSchema = new Schema({
     fine: {
-        currency: {type: String, required: [true, 'Currency required']},
-        amount: {type: Number, required: [true, 'Fine amount required']}
+        currency: {type: String, required: [true, 'Currency required'], default: "GHS"},
+        amount: {type: Number, required: [true, 'Fine amount required'], default: 150}
     },
     driver: {type: Schema.Types.ObjectId, ref: "Driver", required: [true, "Driver required"]},
     vehicle: {type: Schema.Types.ObjectId, ref: "Vehicle", required: [true, "Vehicle required"]},
@@ -23,7 +23,7 @@ const offenseSchema = new Schema({
     },
     offense_name: {
         type: String,
-        enum: ['RED_LIGHT', 'OVER_SPEEDING'],
+        enum: ['RED_LIGHT', 'SPEEDING'],
         required: true
     }
 }, {timestamps: {createdAt: "created_at", updatedAt: "updated_at"}});
