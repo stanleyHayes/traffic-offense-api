@@ -1,6 +1,35 @@
 import httpStatus from "http-status";
 import {OFFENSE_DAO} from "../../../dao/v1/offenses/offenses.dao.js";
 import {uploadImage} from "../../../utils/upload.js";
+import {VEHICLE_DAO} from "../../../dao/v1/vehicles/vehicles.dao.js";
+
+const createOffense = async(req, res) => {
+    try {
+        const {number_plate, image, offense_name, fine} = req.body;
+        const {success, data: vehicle, message, code} = await VEHICLE_DAO.getVehicle({number_plate});
+        if(!success)return res.status(code).json({
+            message: `No vehicle with number plate ${number_plate} found`
+        });
+        const {data: d, success: s, message: m} = await uploadImage(image, {resource_type: "image"});
+        if (!s) {
+            return res.status(httpStatus.BAD_REQUEST).json({message: m});
+        }
+        const createdOffense = await OFFENSE_DAO.createOffense({
+            fine,
+            vehicle,
+            offense_name,
+            driver: vehicle.driver,
+            image: {...d}
+        });
+        if (!success) {
+            return res.status(code).json({message});
+        }
+        await createdOffense.data.populate({path: 'driver'}).populate({path: 'vehicle'});
+        res.status(createdOffense.code).json({data: createdOffense.data, message});
+    }catch (e) {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
+    }
+}
 
 const registerOffense = async (req, res) => {
     try {
@@ -85,4 +114,4 @@ const deleteOffense = async (req, res) => {
 }
 
 
-export {registerOffense, getOffense, deleteOffense, updateOffense, getOffenses};
+export {registerOffense, getOffense, deleteOffense, updateOffense, getOffenses, createOffense};
