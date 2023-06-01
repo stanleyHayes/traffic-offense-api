@@ -16,6 +16,9 @@ const createVehicle = async (vehicle) => {
             }
         }
         const createdVehicle = await Vehicle.create({...vehicle});
+
+        await createdVehicle.populate({path: 'driver', select: 'first_name last_name'})
+
         return {
             success: true,
             message: 'Vehicle registered successfully',
@@ -34,7 +37,7 @@ const createVehicle = async (vehicle) => {
 
 const getVehicle = async (params) => {
     try {
-        const vehicle = await Vehicle.findOne(params);
+        const vehicle = await Vehicle.findOne(params).populate({path: 'driver', select: 'first_name last_name'});
         if (!vehicle) {
             return {
                 success: false,
@@ -134,7 +137,7 @@ const deleteVehicle = async (params) => {
 
 const getVehicles = async (match, options) => {
     try {
-        const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
+        const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).populate({path: 'driver', select: 'first_name last_name'});
         const vehiclesCount = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,
