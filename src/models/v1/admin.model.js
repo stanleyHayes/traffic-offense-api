@@ -23,6 +23,21 @@ const adminSchema = new Schema({
             }
         }
     },
+    phone: {
+        type: String,
+        lowercase: true,
+        unique: true,
+        required: true,
+        validate(value) {
+            if (!validator.isMobilePhone(value)) {
+                throw new Error(`Invalid phone ${value}`);
+            }
+        }
+    },
+    status: {
+        type: String,
+        default: 'Active'
+    },
     password: {
         type: String,
         required: [true, 'License required'],
