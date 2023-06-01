@@ -56,6 +56,7 @@ const updateDriver = async (req, res) => {
         if (!success) {return res.status(code).json({data, message});}
         res.status(code).json({data, message});
     } catch (e) {
+        console.log(e.message)
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
 }

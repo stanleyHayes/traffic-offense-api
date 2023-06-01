@@ -37,7 +37,6 @@ const getDashboard = async (req, res) => {
         const {count: speeding_offenses} = await OFFENSE_DAO.getOffenses({offense_name: 'SPEEDING'});
         const {count: red_light_offenses} = await OFFENSE_DAO.getOffenses({offense_name: 'RED_LIGHT'});
 
-        console.log(draft_offenses, pending_offenses, paid_offenses, speeding_offenses)
         const data= {
             stat: {
                 offenses: {

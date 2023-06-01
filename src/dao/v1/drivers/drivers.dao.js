@@ -73,7 +73,7 @@ const updateDriver = async (params, data) => {
         }
 
         const updates = Object.keys(data);
-        const allowedUpdates = ['first_name', 'last_name', 'address', 'email'];
+        const allowedUpdates = ['first_name', 'last_name', 'address', 'email', 'address', 'phone', 'license_id'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -83,15 +83,15 @@ const updateDriver = async (params, data) => {
                 data: null
             }
         }
-        for (let key of data) {
-            driver[key] = data[key];
+        for (let key of updates) {
+            driver.data[key] = data[key];
         }
-        await driver.save();
+        await driver.data.save();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Driver updated successfully',
-            data: driver
+            data: driver.data
         }
     } catch (e) {
         return {
