@@ -52,21 +52,25 @@ const adminSchema = new Schema({
     },
     permissions: {
         authentication: {
-            create: {
-                type: Boolean,
-                default: false
-            },
-            read: {
+            login: {
                 type: Boolean,
                 default: true
             },
-            update: {
+            update_profile: {
                 type: Boolean,
-                default: false
+                default: true
             },
-            remove: {
+            get_profile: {
                 type: Boolean,
-                default: false
+                default: true
+            },
+            update_password: {
+                type: Boolean,
+                default: true
+            },
+            reset_password: {
+                type: Boolean,
+                default: true
             },
         },
         driver: {
