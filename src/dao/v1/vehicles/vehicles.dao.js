@@ -37,7 +37,7 @@ const createVehicle = async (vehicle) => {
 
 const getVehicle = async (params) => {
     try {
-        const vehicle = await Vehicle.findOne(params).populate({path: 'driver', select: 'first_name last_name'});
+        const vehicle = await Vehicle.findOne(params).populate({path: 'driver'});
         if (!vehicle) {
             return {
                 success: false,
@@ -76,7 +76,7 @@ const updateVehicle = async (params, data) => {
         }
 
         const updates = Object.keys(data);
-        const allowedUpdates = ['color', 'year', 'make', 'model'];
+        const allowedUpdates = ['color', 'year', 'make', 'model', 'number_plate', 'driver'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -87,14 +87,14 @@ const updateVehicle = async (params, data) => {
             }
         }
         for (let key of data) {
-            vehicle[key] = data[key];
+            vehicle.data[key] = data[key];
         }
-        await vehicle.save();
+        await vehicle.data.save();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Vehicle updated successfully',
-            data: vehicle
+            data: vehicle.data
         }
     } catch (e) {
         return {
@@ -118,12 +118,12 @@ const deleteVehicle = async (params) => {
                 data: null
             }
         }
-        await vehicle.remove();
+        await vehicle.data.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Vehicle removed successfully',
-            data: vehicle
+            data: vehicle.data
         }
     } catch (e) {
         return {
@@ -137,7 +137,7 @@ const deleteVehicle = async (params) => {
 
 const getVehicles = async (match, options) => {
     try {
-        const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).populate({path: 'driver', select: 'first_name last_name'});
+        const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).populate({path: 'driver'});
         const vehiclesCount = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();
         return {
             success: true,
