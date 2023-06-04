@@ -96,9 +96,9 @@ const resetPassword = async (req, res) => {
     try {
         const {token} = req.params;
         const {password} = req.body;
-        jwt.verify(token, JWT_SECRET, null, null);
+        const decoded = jwt.verify(token, JWT_SECRET, null, null);
         const {success} = await ADMIN_DAO.updateAdmin(
-            {_id: req.admin._id}, {password: await bcrypt.hash(password, 10)}
+            {_id: decoded._id}, {password: await bcrypt.hash(password, 10)}
         );
         if (!success) {
             return res.status(httpStatus.BAD_REQUEST).json({message: 'Password not changed'});
