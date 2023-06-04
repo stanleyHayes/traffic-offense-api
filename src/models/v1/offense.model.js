@@ -19,7 +19,7 @@ const offenseSchema = new Schema({
     status: {
         type: String,
         enum: ['DRAFT', 'PENDING', 'PAID'],
-        default: 'DRAFT'
+        default: 'PENDING'
     },
     offense_name: {
         type: String,

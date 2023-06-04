@@ -3,8 +3,8 @@ import {ADMIN_DAO} from "../../../dao/v1/admins/admins.dao.js";
 
 const registerAdmin = async (req, res) => {
     try {
-        const {first_name, last_name, email, username, permissions} = req.body;
-        if (!first_name || !last_name || !email || !username) {
+        const {first_name, last_name, email, username, permissions, password} = req.body;
+        if (!first_name || !last_name || !email || !username || !password) {
             return res.status(httpStatus.BAD_REQUEST).json({message: "Missing required fields"});
         }
         const {code, data, message, success} = await ADMIN_DAO.createAdmin({
@@ -12,7 +12,8 @@ const registerAdmin = async (req, res) => {
             last_name,
             email,
             permissions,
-            username
+            username,
+            password: await bcrypt.hash(password, 10)
         });
         if (!success) {return res.status(code).json({message});}
         res.status(code).json({data, message});
@@ -50,9 +51,16 @@ const getAdmins = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
     try {
+
+        delete req.body['updated_at'];
+        delete req.body['created_at'];
+        delete req.body['_id'];
+        delete req.body['__v'];
+
         const {id} = req.params;
-        const {success, code, data, message} = await ADMIN_DAO.updateAdmin({_id: id}, req.body);
-        if (!success) {return res.status(code).json({data, message});}
+        const {success, code, data, message} = await ADMIN_DAO.updateAdmin(
+            {_id: id}, req.body);
+        if (!success) {return res.status(code).json({message});}
         res.status(code).json({data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});

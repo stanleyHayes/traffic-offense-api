@@ -60,7 +60,7 @@ const updateOffense = async (params, data) => {
             }
         }
         const updates = Object.keys(data);
-        const allowedUpdates = ['fine', 'offense_name'];
+        const allowedUpdates = ['fine', 'offense_name', 'status', 'driver', 'vehicle'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -70,15 +70,15 @@ const updateOffense = async (params, data) => {
                 data: null
             }
         }
-        for (let key of data) {
-            offense[key] = data[key];
+        for (let key of updates) {
+            offense.data[key] = data[key];
         }
-        await offense.save();
+        await offense.data.save();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Offense updated successfully',
-            data: offense
+            data: offense.data
         }
     } catch (e) {
         return {
@@ -102,12 +102,12 @@ const deleteOffense = async (params) => {
                 data: null
             }
         }
-        await offense.remove();
+        await offense.data.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Offense removed successfully',
-            data: offense
+            data: offense.data
         }
     } catch (e) {
         return {

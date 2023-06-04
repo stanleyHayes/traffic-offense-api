@@ -86,7 +86,7 @@ const updateVehicle = async (params, data) => {
                 data: null
             }
         }
-        for (let key of data) {
+        for (let key of updates) {
             vehicle.data[key] = data[key];
         }
         await vehicle.data.save();

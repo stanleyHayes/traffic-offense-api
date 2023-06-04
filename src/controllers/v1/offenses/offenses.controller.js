@@ -113,11 +113,13 @@ const getOffenses = async (req, res) => {
 const updateOffense = async (req, res) => {
     try {
         const {id} = req.params;
-        const {success, code, data, message} = await OFFENSE_DAO.updateOffense({_id: id}, req.body);
+        delete req.body['image'];
+        const {success,data, message} = await OFFENSE_DAO.updateOffense(
+            {_id: id}, req.body);
         if (!success) {
-            return res.status(code).json({data, message});
+            return res.status(httpStatus.BAD_REQUEST).json({data, message});
         }
-        res.status(code).json({data, message});
+        res.status(httpStatus.OK).json({data, message: 'Offense updated'});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
