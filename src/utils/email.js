@@ -18,11 +18,10 @@ const sendEmail = async (to, subject, text) => {
 const generateEmail = (name, date, offense, fine, vehicle) => {
     return `
     Dear ${name},
-    I hope this email finds you well. I am writing to inform you that our records indicate you have been involved in a traffic offense on ${new Date(date).toLocaleString()} at approximately ${new Date(date).getTime()}. It is important that you read this email thoroughly and take the necessary actions outlined below
+    I hope this email finds you well. I am writing to inform you that our records indicate you have been involved in a traffic offense on ${new Date(date).toLocaleString()}. It is important that you read this email thoroughly and take the necessary actions outlined below
     Offense Details:
 
         Date: ${new Date(date).toLocaleString()}
-        Time: ${new Date(date).getTime()}
         Offense: ${offense}
         
         Vehicle Details:
