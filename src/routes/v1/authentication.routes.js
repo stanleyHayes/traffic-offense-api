@@ -15,10 +15,10 @@ const router = Router({mergeParams: true});
 
 router.post("/register", register);
 router.post("/login", login);
-router.put("/profile", updateProfile);
+router.put("/profile", authenticate, updateProfile);
 router.get("/profile", authenticate, getProfile);
-router.put("/password", updatePassword);
-router.post("/password/reset", resetPassword);
+router.put("/password", authenticate, updatePassword);
+router.post("/password/reset/:token", resetPassword);
 router.post("/password/forgot", forgotPassword);
 
 export default router;

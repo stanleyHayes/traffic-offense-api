@@ -73,7 +73,7 @@ const updateAdmin = async (params, data) => {
         }
 
         const updates = Object.keys(data);
-        const allowedUpdates = ['first_name', 'last_name', 'address', 'email'];
+        const allowedUpdates = ['first_name', 'last_name', 'username', 'email', 'phone'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {
@@ -83,15 +83,15 @@ const updateAdmin = async (params, data) => {
                 data: null
             }
         }
-        for (let key of data) {
-            admin[key] = data[key];
+        for (let key of updates) {
+            admin.data[key] = data[key];
         }
-        await admin.save();
+        await admin.data.save();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Admin updated successfully',
-            data: admin
+            data: admin.data
         }
     } catch (e) {
         return {
@@ -115,12 +115,12 @@ const deleteAdmin = async (params) => {
                 data: null
             }
         }
-        await admin.remove();
+        await admin.data.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Admin removed successfully',
-            data: admin
+            data: admin.data
         }
     } catch (e) {
         return {
