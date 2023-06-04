@@ -15,7 +15,7 @@ const sendEmail = async (to, subject, text) => {
     }
 };
 
-const generateEmail = (name, date, offense, fine, vehicle) => {
+const generateEmail = (name, date, offense, fine, vehicle, offense_link) => {
     return `
     Dear ${name},
     I hope this email finds you well. I am writing to inform you that our records indicate you have been involved in a traffic offense on ${new Date(date).toLocaleString()}. It is important that you read this email thoroughly and take the necessary actions outlined below
@@ -23,6 +23,7 @@ const generateEmail = (name, date, offense, fine, vehicle) => {
 
         Date: ${new Date(date).toLocaleString()}
         Offense: ${offense}
+        Offense image link: ${offense_link}
         
         Vehicle Details:
             Make:  ${vehicle.make}

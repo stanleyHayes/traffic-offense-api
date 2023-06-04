@@ -72,7 +72,8 @@ const registerOffense = async (req, res) => {
             data.created_at,
             offense_name,
             data.fine,
-            data.vehicle
+            data.vehicle,
+            data.image.secure_url
         );
         const {success: sent} = await EMAIL.sendEmail(data.driver.email, subject, text);
         if (success) data.email_sent = sent;
