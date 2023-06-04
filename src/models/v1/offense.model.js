@@ -25,6 +25,10 @@ const offenseSchema = new Schema({
         type: String,
         enum: ['RED_LIGHT', 'SPEEDING'],
         required: true
+    },
+    email_sent: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: {createdAt: "created_at", updatedAt: "updated_at"}});
 
