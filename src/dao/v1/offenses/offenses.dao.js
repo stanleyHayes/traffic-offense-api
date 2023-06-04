@@ -93,8 +93,8 @@ const updateOffense = async (params, data) => {
 
 const deleteOffense = async (params) => {
     try {
-        const offense = await getOffense(params);
-        if (!offense.success) {
+        const {data, success} = await getOffense(params);
+        if (!success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
@@ -102,12 +102,12 @@ const deleteOffense = async (params) => {
                 data: null
             }
         }
-        await offense.data.remove();
+        await data.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Offense removed successfully',
-            data: offense.data
+            data
         }
     } catch (e) {
         return {

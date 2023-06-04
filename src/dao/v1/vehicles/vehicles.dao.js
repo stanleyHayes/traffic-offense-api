@@ -109,21 +109,21 @@ const updateVehicle = async (params, data) => {
 
 const deleteVehicle = async (params) => {
     try {
-        const vehicle = await getVehicle(params);
-        if (!vehicle.success) {
+        const {data, success} = await getVehicle(params);
+        if (!success) {
             return {
-                success: false,
+                success,
                 code: httpStatus.NOT_FOUND,
                 message: 'Vehicle not found',
                 data: null
             }
         }
-        await vehicle.data.remove();
+        await data.remove();
         return {
-            success: true,
+            success,
             code: httpStatus.OK,
             message: 'Vehicle removed successfully',
-            data: vehicle.data
+            data
         }
     } catch (e) {
         return {

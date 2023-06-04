@@ -106,21 +106,21 @@ const updateDriver = async (params, data) => {
 
 const deleteDriver = async (params) => {
     try {
-        const driver = await getDriver(params);
-        if (!driver.success) {
+        const {data, success} = await getDriver(params);
+        if (!success) {
             return {
-                success: false,
+                success,
                 code: httpStatus.NOT_FOUND,
                 message: 'Driver not found',
                 data: null
             }
         }
-        await driver.remove();
+        await data.remove();
         return {
-            success: true,
+            success,
             code: httpStatus.OK,
             message: 'Driver removed successfully',
-            data: driver
+            data
         }
     } catch (e) {
         return {

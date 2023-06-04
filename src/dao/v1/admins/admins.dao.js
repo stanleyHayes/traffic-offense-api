@@ -106,8 +106,8 @@ const updateAdmin = async (params, data) => {
 
 const deleteAdmin = async (params) => {
     try {
-        const admin = await getAdmin(params);
-        if (!admin.success) {
+        const {data, success} = await getAdmin(params);
+        if (!success) {
             return {
                 success: false,
                 code: httpStatus.NOT_FOUND,
@@ -115,12 +115,12 @@ const deleteAdmin = async (params) => {
                 data: null
             }
         }
-        await admin.data.remove();
+        await data.remove();
         return {
             success: true,
             code: httpStatus.OK,
             message: 'Admin removed successfully',
-            data: admin.data
+            data
         }
     } catch (e) {
         return {
