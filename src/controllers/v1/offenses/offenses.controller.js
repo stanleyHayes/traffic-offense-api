@@ -15,29 +15,30 @@ const createOffense = async (req, res) => {
         if (!s) {
             return res.status(httpStatus.BAD_REQUEST).json({message: m});
         }
-        const createdOffense = await OFFENSE_DAO.createOffense({
+        const {data, success: created} = await OFFENSE_DAO.createOffense({
             fine,
             vehicle,
             offense_name,
             driver: vehicle.driver,
             image: {...d}
         });
-        if (!success) {
+        if (!created) {
             return res.status(code).json({message});
         }
-        await createdOffense.data.populate({path: 'driver'}).populate({path: 'vehicle'});
+        await data.populate({path: 'driver'});
+        await data.populate({path: 'vehicle'});
         const subject = `Notice of Traffic Offense - Urgent Response Required`;
         const text = EMAIL.generateEmail(
-            `${createdOffense.data.driver.first_name} ${createdOffense.data.driver.last_name}`,
-            createdOffense.data.created_at,
+            `${data.driver.first_name} ${data.driver.last_name}`,
+            data.created_at,
             offense_name,
-            createdOffense.data.fine,
-            createdOffense.data.vehicle
+            data.fine,
+            data.vehicle
         );
-        const {success: sent} = await EMAIL.sendEmail(createdOffense.data.driver.email, subject, text);
-        if (success) createdOffense.data.email_sent = sent;
-        await createdOffense.data.save();
-        res.status(createdOffense.code).json({data: createdOffense.data, message});
+        const {success: sent} = await EMAIL.sendEmail(data.driver.email, subject, text);
+        if (success) data.email_sent = sent;
+        await data.save();
+        res.status(code).json({data: data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
@@ -63,7 +64,8 @@ const registerOffense = async (req, res) => {
         if (!success) {
             return res.status(code).json({message});
         }
-        await data.populate({path: 'driver'}).populate({path: 'vehicle'});
+        await data.populate({path: 'driver'});
+        await data.populate({path: 'vehicle'});
         const subject = `Notice of Traffic Offense - Urgent Response Required`;
         const text = EMAIL.generateEmail(
             `${data.driver.first_name} ${data.driver.last_name}`,
@@ -77,6 +79,7 @@ const registerOffense = async (req, res) => {
         await data.save();
         res.status(code).json({data, message});
     } catch (e) {
+        console.log(e.message)
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
 }

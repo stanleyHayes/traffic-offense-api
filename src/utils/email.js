@@ -10,6 +10,7 @@ const sendEmail = async (to, subject, text) => {
         await sgMail.send(msg);
         return {success: true, message: 'Email sent successfully'};
     }catch (e) {
+        console.log(e.message);
         return {success: false, message: e.message};
     }
 };
