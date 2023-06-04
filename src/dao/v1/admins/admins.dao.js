@@ -73,7 +73,7 @@ const updateAdmin = async (params, data) => {
         }
 
         const updates = Object.keys(data);
-        const allowedUpdates = ['first_name', 'last_name', 'username', 'email', 'phone'];
+        const allowedUpdates = ['first_name', 'last_name', 'username', 'email', 'phone', 'password'];
         const allowed = updates.every(update => allowedUpdates.includes(update));
         if (!allowed) {
             return {

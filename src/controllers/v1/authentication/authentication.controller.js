@@ -67,7 +67,8 @@ const updatePassword = async (req, res) => {
         }
         const {success} = await ADMIN_DAO.updateAdmin(
             {_id: req.user._id},
-            {password: await bcrypt.hash(password, 10)
+            {
+                password: await bcrypt.hash(password, 10)
             });
         if (!success) {
             return res.status(httpStatus.BAD_REQUEST).json({message: 'Password not updated'});
@@ -98,8 +99,10 @@ const resetPassword = async (req, res) => {
         const {password} = req.body;
         const decoded = jwt.verify(token, JWT_SECRET, null, null);
         const {success} = await ADMIN_DAO.updateAdmin(
-            {_id: decoded._id}, {password: await bcrypt.hash(password, 10)}
-        );
+            {_id: decoded._id},
+            {
+                password: await bcrypt.hash(password, 10)
+            });
         if (!success) {
             return res.status(httpStatus.BAD_REQUEST).json({message: 'Password not changed'});
         }
@@ -111,9 +114,9 @@ const resetPassword = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
     try {
-        const {success,  data} = await ADMIN_DAO.getAdmin({email: req.body.email});
+        const {success, data} = await ADMIN_DAO.getAdmin({email: req.body.email});
         if (!success) {
-            return res.status(httpStatus.NOT_FOUND).json({ message: 'Email not found'});
+            return res.status(httpStatus.NOT_FOUND).json({message: 'Email not found'});
         }
         const token = jwt.sign({_id: data._id}, JWT_SECRET, {expiresIn: '1h'}, null);
         const link = `https://trafficoffense.vercel.app/auth/reset-password/${token}`;
@@ -127,10 +130,10 @@ const forgotPassword = async (req, res) => {
         - The Traffic Offense team
         `;
         const {success: sent,} = await EMAIL.sendEmail(data.email, subject, text);
-        if(!sent) return res.status(httpStatus.BAD_REQUEST).json({
+        if (!sent) return res.status(httpStatus.BAD_REQUEST).json({
             message: 'Email not sent'
         });
-        res.status(httpStatus.OK).json({ message: 'Email sent'});
+        res.status(httpStatus.OK).json({message: 'Email sent'});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
