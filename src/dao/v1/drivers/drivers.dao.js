@@ -132,7 +132,7 @@ const deleteDriver = async (params) => {
     }
 }
 
-const getDrivers = async (match, options) => {
+const getDrivers = async (match, options = {sort: {created_at: -1}, skip: 0, limit: 50}) => {
     try {
         const drivers = await Driver.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip);
         const driversCount = await Driver.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();

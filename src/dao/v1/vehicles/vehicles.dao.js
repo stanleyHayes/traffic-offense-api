@@ -135,7 +135,7 @@ const deleteVehicle = async (params) => {
     }
 }
 
-const getVehicles = async (match, options) => {
+const getVehicles = async (match, options = {sort: {created_at: -1}, skip: 0, limit: 50}) => {
     try {
         const vehicles = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).populate({path: 'driver'});
         const vehiclesCount = await Vehicle.find(match).sort(options?.sort).limit(options?.limit).skip(options?.skip).countDocuments();

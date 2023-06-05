@@ -6,7 +6,7 @@ import {
     updateOffense,
     deleteOffense,
     getOffense,
-     createOffense
+    createOffense
 } from "./../../controllers/v1/offenses/offenses.controller.js";
 import {authenticate} from "../../middleware/v1/authenticate.js";
 

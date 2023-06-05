@@ -5,12 +5,13 @@ import {
     getAdmins,
     updateAdmin,
     deleteAdmin,
-    getAdmin, inviteAdmin
+    getAdmin, inviteAdmin, searchAdmins
 } from "./../../controllers/v1/admins/admins.controller.js";
 import {authenticate} from "../../middleware/v1/authenticate.js";
 
 const router = Router({mergeParams: true});
 
+router.get('/search', authenticate, searchAdmins);
 router.route("/").post(authenticate, registerAdmin).get(authenticate, getAdmins);
 router.route("/:id").get(authenticate, getAdmin).put(authenticate, updateAdmin).delete(authenticate, deleteAdmin);
 router.post("/invite", authenticate, inviteAdmin);

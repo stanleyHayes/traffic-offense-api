@@ -36,7 +36,7 @@ const adminSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'Active'
+        default: 'ACTIVE'
     },
     password: {
         type: String,

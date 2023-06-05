@@ -3,6 +3,7 @@ import {OFFENSE_DAO} from "../../../dao/v1/offenses/offenses.dao.js";
 import {uploadImage} from "../../../utils/upload.js";
 import {VEHICLE_DAO} from "../../../dao/v1/vehicles/vehicles.dao.js";
 import {EMAIL} from "../../../utils/email.js";
+import {ADMIN_DAO} from "../../../dao/v1/admins/admins.dao.js";
 
 const createOffense = async (req, res) => {
     try {
@@ -105,6 +106,9 @@ const getOffenses = async (req, res) => {
         const skip = (page - 1) * limit;
         const sort = req.query.sort || {created_at: -1};
         const match = {};
+        if(req.query.offense){match['offense_name'] = req.query.offense;}
+        if(req.query.driver){match['driver'] = req.query.driver;}
+        if(req.query.vehicle){match['vehicle'] = req.query.vehicle;}
         const options = {sort, limit, skip};
         const {code, data, message, count} = await OFFENSE_DAO.getOffenses(match, options);
         res.status(code).json({data, message, count});
