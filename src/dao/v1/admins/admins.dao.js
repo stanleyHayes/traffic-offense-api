@@ -115,7 +115,7 @@ const deleteAdmin = async (params) => {
                 data: null
             }
         }
-        await data.remove();
+        await Admin.deleteOne({_id: data._id});
         return {
             success: true,
             code: httpStatus.OK,

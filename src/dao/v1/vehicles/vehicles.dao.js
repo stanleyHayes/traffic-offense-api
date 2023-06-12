@@ -1,5 +1,7 @@
 import Vehicle from "../../../models/v1/vehicle.model.js";
 import httpStatus from "http-status";
+import {DRIVER_DAO} from "../drivers/drivers.dao.js";
+import Driver from "../../../models/v1/driver.model.js";
 
 const createVehicle = async (vehicle) => {
     try {
@@ -112,20 +114,21 @@ const deleteVehicle = async (params) => {
         const {data, success} = await getVehicle(params);
         if (!success) {
             return {
-                success,
+                success:false,
                 code: httpStatus.NOT_FOUND,
                 message: 'Vehicle not found',
                 data: null
             }
         }
-        await data.remove();
+        await Vehicle.deleteOne({_id: data._id});
         return {
-            success,
+            success: false,
             code: httpStatus.OK,
             message: 'Vehicle removed successfully',
-            data
+            data: data
         }
     } catch (e) {
+        console.log(e.message)
         return {
             success: false,
             message: e.message,

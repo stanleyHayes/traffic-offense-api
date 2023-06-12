@@ -102,7 +102,7 @@ const deleteOffense = async (params) => {
                 data: null
             }
         }
-        await data.remove();
+        await Offense.deleteOne({_id: data._id});
         return {
             success: true,
             code: httpStatus.OK,

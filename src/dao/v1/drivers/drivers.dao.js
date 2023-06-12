@@ -115,7 +115,7 @@ const deleteDriver = async (params) => {
                 data: null
             }
         }
-        await data.remove();
+        await Driver.deleteOne({_id: data._id});
         return {
             success,
             code: httpStatus.OK,
