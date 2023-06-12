@@ -5,8 +5,8 @@ const offenseSchema = new Schema({
         currency: {type: String, required: [true, 'Currency required'], default: "GHS"},
         amount: {type: Number, required: [true, 'Fine amount required'], default: 150}
     },
-    driver: {type: Schema.Types.ObjectId, ref: "Driver", required: [true, "Driver required"]},
-    vehicle: {type: Schema.Types.ObjectId, ref: "Vehicle", required: [true, "Vehicle required"]},
+    driver: {type: Schema.Types.ObjectId, ref: "Driver"},
+    vehicle: {type: Schema.Types.ObjectId, ref: "Vehicle"},
     image: {
         secure_url: {type: String, required: true},
         public_id: {type: String, required: true},

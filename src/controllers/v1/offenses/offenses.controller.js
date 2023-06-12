@@ -1,30 +1,22 @@
 import httpStatus from "http-status";
 import {OFFENSE_DAO} from "../../../dao/v1/offenses/offenses.dao.js";
 import {uploadImage} from "../../../utils/upload.js";
-import {VEHICLE_DAO} from "../../../dao/v1/vehicles/vehicles.dao.js";
 import {EMAIL} from "../../../utils/email.js";
-import {ADMIN_DAO} from "../../../dao/v1/admins/admins.dao.js";
 
 const createOffense = async (req, res) => {
     try {
-        const {number_plate, image, offense_name, fine} = req.body;
-        const {success, data: vehicle, message, code} = await VEHICLE_DAO.getVehicle({number_plate});
-        if (!success) return res.status(code).json({
-            message: `No vehicle with number plate ${number_plate} found`
-        });
+        const { image, offense_name, fine} = req.body;
         const {data: d, success: s, message: m} = await uploadImage(image, {resource_type: "image"});
         if (!s) {
             return res.status(httpStatus.BAD_REQUEST).json({message: m});
         }
-        const {data, success: created} = await OFFENSE_DAO.createOffense({
+        const {data, success: created, message} = await OFFENSE_DAO.createOffense({
             fine,
-            vehicle,
             offense_name,
-            driver: vehicle.driver,
             image: {...d}
         });
         if (!created) {
-            return res.status(code).json({message});
+            return res.status(httpStatus.BAD_REQUEST).json({message});
         }
         await data.populate({path: 'driver'});
         await data.populate({path: 'vehicle'});
@@ -37,9 +29,9 @@ const createOffense = async (req, res) => {
             data.vehicle
         );
         const {success: sent} = await EMAIL.sendEmail(data.driver.email, subject, text);
-        if (success) data.email_sent = sent;
+        if (sent) data.email_sent = sent;
         await data.save();
-        res.status(code).json({data: data, message});
+        res.status(httpStatus.OK).json({data: data, message});
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
     }
